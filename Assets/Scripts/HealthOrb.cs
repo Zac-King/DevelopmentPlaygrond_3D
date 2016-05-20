@@ -2,41 +2,62 @@
 using System.Collections;
 using System;
 
-public class HealthOrb : MonoBehaviour, IVacuumable, IExpirable
+public class HealthOrb : MonoBehaviour, IPickUp, IExpirable
 {
-    [SerializeField] private float lifeTime = 0;
-
+    void Awake()
+    {
+        IsExpiring = true;
+    }
+    // IExpirable Implementation ///////////////////////////////////////////////////////////////////////
     private bool isExpiring;
-    public bool IsExpiring
+    public bool IsExpiring      // read-write   // Instance property
     {
         get
-        {
-            throw new NotImplementedException();
-        }
+        {   return isExpiring;  }
 
         set
         {
-            throw new NotImplementedException();
+            if (value != isExpiring)
+            {
+                isExpiring = value;
+
+                if (isExpiring)
+                    StartCoroutine("ExpirtionCountDown");
+                else
+                    StopCoroutine("ExpirtionCountDown");
+            }
         }
     }
 
-    public float LifeTime
+    [SerializeField] private float lifeTime = 0;
+    public float LifeTime       // read only    // Instance property
     {
         get
         { return lifeTime; }
     }
 
+    [SerializeField] private float elapsedTime = 0;     // Only for Editor
     public IEnumerator ExpirtionCountDown()
     {
-        throw new NotImplementedException();
-    }
+        float timer = 0;
 
-    public void OnCollected()
-    {
-        throw new NotImplementedException();
+        while (timer <= LifeTime)
+        {
+            timer += Time.deltaTime;
+            elapsedTime = timer;
+            yield return null;
+        }
+        
+        OnExpire();
     }
 
     public void OnExpire()
+    {
+        Debug.Log(gameObject.name + " Expired");
+        Destroy(gameObject);
+    }
+    // IPickUp /////////////////////////////////////////////////////////////////////////////////////////
+    public void OnCollected()
     {
         throw new NotImplementedException();
     }
