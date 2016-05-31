@@ -64,6 +64,8 @@ public class HealthOrb : MonoBehaviour, IPickUp, IExpirable
     {
         StopCoroutine(Vacuum());// 
         // The cool stuff here 
+        Debug.Log(gameObject.name + " collected");
+        Destroy(gameObject.transform.parent.gameObject);
         Destroy(gameObject);    // 
     }
 
