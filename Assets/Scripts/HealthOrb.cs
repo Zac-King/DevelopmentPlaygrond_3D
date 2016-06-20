@@ -4,11 +4,16 @@ using System;
 
 public class HealthOrb : MonoBehaviour, IPickUp, IExpirable
 {
+    #region // Unity Functions //
     void Awake()
     {
         IsExpiring = true;
     }
-    // IExpirable Implementation ///////////////////////////////////////////////////////////////////////
+    #endregion
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    #region // IExpirable Implementation //
     private bool m_isExpiring;  // private member variable  // Accessable through 'IsExpiring' Instance property
     public bool IsExpiring      // read-write       // Instance property
     {
@@ -57,14 +62,18 @@ public class HealthOrb : MonoBehaviour, IPickUp, IExpirable
         //Debug.Log(gameObject.name + " Expired");
         Destroy(gameObject);
     }
-    // IPickUp Implementation //////////////////////////////////////////////////////////////////////////
+    #endregion
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    #region // IPickUp Implementation //
     private bool available = true;
 
     public void OnCollected()               // 
     {
         StopCoroutine(Vacuum());// 
         // The cool stuff here 
-        Debug.Log(gameObject.name + " collected");
+            //Debug.Log(gameObject.name + " collected");
         Destroy(gameObject.transform.parent.gameObject);
         Destroy(gameObject);    // 
     }
@@ -94,4 +103,5 @@ public class HealthOrb : MonoBehaviour, IPickUp, IExpirable
         }
         OnCollected();
     }
+    #endregion
 }
